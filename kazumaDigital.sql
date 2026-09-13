@@ -255,7 +255,7 @@ BEGIN
     END LOOP;
 END;
 
--- Cursor simple con filtro para el cliente con id 1
+-- Cursor explicito con filtro para el cliente con id 1
 DECLARE
     CURSOR c_clientes IS
         SELECT id_cliente, primer_nombre || ' ' || primer_apellido AS nombre_completo
@@ -270,6 +270,50 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('ID Cliente:' || ' ' || v_info_cliente.id_cliente || ' ' || v_info_cliente.nombre_completo);
     END LOOP;
     CLOSE c_clientes;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No se encontraron datos para el cliente especificado.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Ocurrió un error: ' || SQLERRM);
+END;
+
+-- Cursor con parametros
+
+DECLARE
+    CURSOR c_detalle (p_id NUMBER) IS
+        SELECT v.id_venta, v.id_cliente
+        FROM detalle_venta v
+        WHERE v.id_cliente = p_id;
+    v_info_detalle c_detalle%ROWTYPE;
+
+BEGIN
+    FOR fila IN c_detalle(1) LOOP
+        DBMS_OUTPUT.PUT_LINE('ID Venta: ' || fila.id_venta || ' ID Cliente: ' || fila.id_cliente);
+    END LOOP;
+END;
+
+
+--Cursor con parametros
+DECLARE
+    CURSOR c_detalle (p_id NUMBER) IS
+        SELECT v.id_venta, dv.cantidad, dv.precio_unitario
+        FROM venta v
+        JOIN detalle_venta dv
+        ON v.id_venta = dv.id_venta
+        WHERE v.id_cliente = p_id;
+    v_info_detalle c_detalle%ROWTYPE;
+
+BEGIN
+    FOR fila in c_detalle(1) LOOP
+              DBMS_OUTPUT.PUT_LINE(
+            'Venta: ' || fila.id_venta ||
+            ' | Cantidad: ' || fila.cantidad ||
+            ' | Precio: ' || fila.precio_unitario
+        );
+    END LOOP ;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Ocurrió un error: ' || SQLERRM); -- Atrapamos cualquier tipo de error que se nos pasara antes
 END;
 
 /* lo qie trato de hacer aca es un reporte de los clientes
@@ -278,7 +322,6 @@ entonces la idea es crear un cursor sin parametros para obtener la informacion d
 recibir el id del cliente y asi filtar la venta con su id y hacerle join con las tablas detalle y productos */
 
 DECLARE
-
  -- Record r_cliente
     TYPE r_cliente IS RECORD (
         id_cli      cliente.id_cliente%TYPE,
@@ -293,7 +336,7 @@ CURSOR c_clientes IS
         SELECT id_cliente, primer_nombre || ' ' || primer_apellido
         FROM cliente;
 
--- Cursor con parametros es para traer la info de productos y cantidad por el precio
+-- Cursor ex parametros es para traer la info de productos y cantidad por el precio
     CURSOR c_detalle_compras (p_id_cliente NUMBER) IS
         SELECT p.nombre, (dv.cantidad * dv.precio_unitario)
         FROM venta v
