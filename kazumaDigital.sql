@@ -33,16 +33,15 @@
 
 -- Procedimientos INSERT UPDATE DELETE
 --
--- Drops TABLE
-/*
-DROP TABLE detalle_venta CASCADE CONSTRAINT;
-DROP TABLE venta CASCADE CONSTRAINT;
-DROP TABLE cliente CASCADE CONSTRAINT;
-DROP TABLE producto CASCADE CONSTRAINT;
-DROP TABLE categoria CASCADE CONSTRAINT;
-DROP TABLE ciudad CASCADE CONSTRAINT;
-DROP TABLE region CASCADE CONSTRAINT;
-*/
+-- Drops TABLE (orden: hijas primero para no violar FK)
+DROP TABLE detalle_envio CASCADE CONSTRAINTS;
+DROP TABLE detalle_venta CASCADE CONSTRAINTS;
+DROP TABLE venta CASCADE CONSTRAINTS;
+DROP TABLE cliente CASCADE CONSTRAINTS;
+DROP TABLE producto CASCADE CONSTRAINTS;
+DROP TABLE categoria CASCADE CONSTRAINTS;
+DROP TABLE ciudad CASCADE CONSTRAINTS;
+DROP TABLE region CASCADE CONSTRAINTS;
 
 -- Region
 CREATE TABLE region (
@@ -133,20 +132,20 @@ CREATE TABLE detalle_envio(
     CONSTRAINT fk_detalle_envio_producto FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
     CONSTRAINT fk_detalle_envio_ciudad FOREIGN KEY (id_ciudad) REFERENCES ciudad(id_ciudad)
 );
-
-
 -- Poblado de datos
 
 -- poblando la tabla region
-INSERT INTO region (nombre, id_ciudad) VALUES ('Región Metropolitana', 1);
-INSERT INTO region (nombre, id_ciudad) VALUES ('Valparaíso', 2);
+INSERT INTO region (nombre, id_pais) VALUES ('Región Metropolitana', 1);
+INSERT INTO region (nombre, id_pais) VALUES ('Valparaíso', 2);
+INSERT INTO region (nombre, id_pais) VALUES ('Maule', 3);
+INSERT INTO region (nombre, id_pais) VALUES ('Arica y Parinacota', 4);
+
 
 -- poblando la tabla ciudad
 INSERT INTO ciudad (nombre, id_region) VALUES ('Santiago', 1);
 INSERT INTO ciudad (nombre, id_region) VALUES ('Valparaíso', 2);
 INSERT INTO ciudad (nombre, id_region) VALUES ('Valdivia', 3);
-INSERT INTO ciudad (nombre, id_region) VALUES ('Concepción', 4);
-INSERT INTO ciudad (nombre, id_region) VALUES ('La Serena', 5);
+INSERT INTO ciudad (nombre, id_region) VALUES ('Arica', 4);
 
 -- poblando la tabla categorias
 INSERT INTO categoria (nombre, descripcion) VALUES ('Gaming y Streaming', 'Equipos, accesorios y productos enfocados en videojuegos');
@@ -178,17 +177,17 @@ VALUES (20589632, '3', 'Hernan', 'Ignacio','Garcia','Sanchez',TO_DATE('15/08/199
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
 VALUES (20159357, '4', 'Daniel', '', 'Pinto', '', TO_DATE('20/08/2000', 'DD/MM/YYYY'), 'danielpinto@gmail.com', 4);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (19632578, '5', 'Setsuna', 'Freendom', 'Seiei', '', TO_DATE('20/08/2000', 'DD/MM/YYYY'), 'setsuna@gmail.com', 5);
+VALUES (19632578, '5', 'Setsuna', 'Freendom', 'Seiei', '', TO_DATE('20/08/2000', 'DD/MM/YYYY'), 'setsuna@gmail.com', 4);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (19456357, '6', 'Luis', '123456789');
+VALUES (19456357, '6', 'Luis', 'Andres', 'Perez', 'Gonzalez', TO_DATE('10/05/1990', 'DD/MM/YYYY'), 'luis.perez@gmail.com', 1);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (20258852, '7', 'Lorena', '987654321');
+VALUES (20258852, '7', 'Lorena', 'Alejandra', 'Fuentes', 'Rojas', TO_DATE('25/11/1992', 'DD/MM/YYYY'), 'lorena.fuentes@gmail.com', 2);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (19159357, '8', 'Luisa', 'Freendom', '123456789');
+VALUES (19159357, '8', 'Luisa', 'Freendom', 'Soto', 'Morales', TO_DATE('03/02/1988', 'DD/MM/YYYY'), 'luisa.soto@gmail.com', 3);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (19654456, '9', 'Luis', '123456789');
+VALUES (19654456, '9', 'Luis', 'Ignacio', 'Castro', 'Vidal', TO_DATE('17/07/1995', 'DD/MM/YYYY'), 'luis.castro@gmail.com', 4);
 INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, email, id_ciudad)
-VALUES (19951325, 'K', 'Lorena', '123456789');
+VALUES (19951325, 'K', 'Lorena', 'Beatriz', 'Munoz', 'Silva', TO_DATE('29/09/1991', 'DD/MM/YYYY'), 'lorena.munoz@gmail.com', 1);
 
 -- poblando la tabla de ventas
 INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-01', 'YYYY-MM-DD'), 1);
@@ -215,18 +214,26 @@ INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VAL
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (9, 9, 9, 400);
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (10, 10, 10, 500);
 
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (1, 1, 1);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (2, 2, 2);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (3, 3, 3);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (4, 4, 4);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (5, 5, 1);
+
+
 --COMMIT;
 
 --ROLLBACK;
 
 
+SET SERVEROUTPUT ON;
 -- Consultas con JOIN
 SELECT *
 FROM cliente c
 JOIN venta v ON c.id_cliente = v.id_cliente
-JOIN detalle_venta dv ON v.id_venta = dv.id_venta
-JOIN producto p ON dv.id_producto = p.id_producto
-ORDER BY id_cliente ASC;
+JOIN detalle_venta d ON v.id_venta = d.id_venta
+JOIN producto p ON d.id_producto = p.id_producto
+ORDER BY c.id_cliente ASC;
 
 -- Subconsulta
 SELECT *
@@ -240,17 +247,30 @@ WHERE v.id_venta IN (
 
 -- Varray
 DECLARE
-    TYPE p_categorias IS VARRAY (5)
-    OF categoria.nombre_categoria%TYPE;
-
-
-
+    TYPE p_categorias IS VARRAY (5) OF VARCHAR(50);
+    v_categorias p_categorias := p_categorias('categoria1', 'categoria2', 'categoria3', 'categoria4', 'categoria5');
 BEGIN
-
+    FOR i IN 1..v_categorias.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE(v_categorias(i));
+    END LOOP;
 END;
 
--- Sentencias PL/SQL de Hernan
-SET SERVEROUTPUT ON;
+-- Cursor simple con filtro para el cliente con id 1
+DECLARE
+    CURSOR c_clientes IS
+        SELECT id_cliente, primer_nombre || ' ' || primer_apellido AS nombre_completo
+        FROM cliente c
+        WHERE c.id_cliente = 1;
+    v_info_cliente c_clientes%ROWTYPE;
+BEGIN
+    OPEN c_clientes;
+    LOOP
+        FETCH c_clientes INTO v_info_cliente;
+        EXIT WHEN c_clientes%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('ID Cliente:' || ' ' || v_info_cliente.id_cliente || ' ' || v_info_cliente.nombre_completo);
+    END LOOP;
+    CLOSE c_clientes;
+END;
 
 /* lo qie trato de hacer aca es un reporte de los clientes
 para saber si un cliente compro un producto o  no y saber r cuanto gasto por la cantidad que lleva
