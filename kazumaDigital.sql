@@ -347,3 +347,42 @@ CURSOR c_clientes IS
 BEGIN
 
 END;
+
+
+-- Cursor de Daniel
+DECLARE
+    -- Exception personalizado
+    cantidad_invalida EXCEPTION;
+    v_cantidad NUMBER := -1;
+    CURSOR c_clientes IS
+        SELECT c.id_cliente,
+        c.id_cliente || '-' || c.digito_veri AS RUN,
+            c.primer_nombre || ' ' || c.primer_apellido AS nombre
+        FROM cliente c
+        WHERE ROWNUM <= 5;
+
+    CURSOR c_ventas_cliente (p_id_cliente IN cliente.id_cliente%TYPE)IS
+        SELECT v.id_venta,
+            dv.cantidad, dv.precio_unitario
+        FROM venta v
+        JOIN detalle_venta dv ON v.id_venta = dv.id_venta
+        WHERE id_cliente = p_id_cliente;
+BEGIN
+    IF v_cantidad < 0 THEN
+        RAISE cantidad_invalida;
+    END IF;
+
+    FOR r_cliente IN c_clientes LOOP
+        DBMS_OUTPUT.PUT_LINE('---------------------------------');
+        DBMS_OUTPUT.PUT_LINE('Cliente: ' || r_cliente.nombre);
+        DBMS_OUTPUT.PUT_LINE('---------------------------------');
+
+        FOR r_ventas in c_ventas_cliente(r_cliente.id_cliente) LOOP
+            DBMS_OUTPUT.PUT_LINE('ID VENTA:'||r_ventas.id_venta || ' ' ||  'Cantidad: '
+            || r_ventas.cantidad ||' '||'Precio /U: ' || r_ventas.precio_unitario);
+        END LOOP;
+    END LOOP;
+EXCEPTION
+    WHEN cantidad_invalida THEN
+        DBMS_OUTPUT.PUT_LINE('ERROR: Cantidad invalida!');
+END;
