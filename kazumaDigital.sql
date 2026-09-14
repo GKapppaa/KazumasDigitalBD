@@ -47,7 +47,6 @@ DROP TABLE region CASCADE CONSTRAINTS;
 CREATE TABLE region (
     id_region INT GENERATED ALWAYS AS IDENTITY,
     nombre VARCHAR2(50) NOT NULL,
-    id_pais INT NOT NULL,
     CONSTRAINT pk_region PRIMARY KEY (id_region)
 );
 
@@ -132,13 +131,14 @@ CREATE TABLE detalle_envio(
     CONSTRAINT fk_detalle_envio_producto FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
     CONSTRAINT fk_detalle_envio_ciudad FOREIGN KEY (id_ciudad) REFERENCES ciudad(id_ciudad)
 );
+
 -- Poblado de datos
 
 -- poblando la tabla region
-INSERT INTO region (nombre, id_pais) VALUES ('Región Metropolitana', 1);
-INSERT INTO region (nombre, id_pais) VALUES ('Valparaíso', 2);
-INSERT INTO region (nombre, id_pais) VALUES ('Maule', 3);
-INSERT INTO region (nombre, id_pais) VALUES ('Arica y Parinacota', 4);
+INSERT INTO region (nombre) VALUES ('Región Metropolitana');
+INSERT INTO region (nombre) VALUES ('Valparaíso');
+INSERT INTO region (nombre) VALUES ('Los Rios');
+INSERT INTO region (nombre) VALUES ('Arica y Parinacota');
 
 
 -- poblando la tabla ciudad
@@ -155,16 +155,16 @@ INSERT INTO categoria (nombre, descripcion) VALUES ('Conectividad y Redes', 'Rou
 INSERT INTO categoria (nombre, descripcion) VALUES ('Audio y Video', 'Monitores, audífonos, micrófonos y sonido');
 
 -- poblando la tabla de productos
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Monitor gamer', 'Asus', 469990, 50, 1);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Audifonos Gamer', 'Hyperx', 89990, 20, 5);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Producto 3', 'Marca 3', 300, 30, 2);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Placa Madre B650', 'Asus', 400, 40, 3);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Producto 5', 'Marca 5', 500, 50, 4);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Monitor gamer', 'Asus', 469990, 10, 1);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Producto 2', 'Marca 2', 200, 20, 2);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Producto 3', 'Marca 3', 300, 30, 2);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Placa Madre B650', 'Asus', 400, 40, 3);
-INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Producto 5', 'Marca 5', 500, 50, 4);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Monitor Gamer 27"', 'Asus', 469990, 50, 1);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Audifonos Gamer Cloud', 'Hyperx', 89990, 20, 5);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Notebook Slim 15', 'Lenovo', 450000, 30, 2);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Placa Madre B650', 'Asus', 180000, 40, 3);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Router Wi-Fi 6', 'TP-Link', 65000, 50, 4);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Teclado Mecánico RGB', 'Redragon', 45000, 25, 1);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Procesador Ryzen 7', 'AMD', 290000, 15, 3);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Memoria RAM 16GB', 'Kingston', 55000, 60, 3);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Disco SSD 1TB', 'Crucial', 75000, 40, 3);
+INSERT INTO producto (nombre, marca, precio, stock, id_categoria) VALUES ('Micrófono Condensador', 'Razer', 110000, 18, 5);
 
 -- poblando la tabla de clientes
 -- rut sin dígito verificador (los primeros 8 dígitos) y digito_veri aparte
@@ -190,35 +190,41 @@ INSERT INTO cliente (rut, digito_veri, primer_nombre, segundo_nombre, primer_ape
 VALUES (19951325, 'K', 'Lorena', 'Beatriz', 'Munoz', 'Silva', TO_DATE('29/09/1991', 'DD/MM/YYYY'), 'lorena.munoz@gmail.com', 1);
 
 -- poblando la tabla de ventas
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-01', 'YYYY-MM-DD'), 1);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-02', 'YYYY-MM-DD'), 2);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-03', 'YYYY-MM-DD'), 3);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-04', 'YYYY-MM-DD'), 4);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-05', 'YYYY-MM-DD'), 5);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-01', 'YYYY-MM-DD'), 6);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-02', 'YYYY-MM-DD'), 7);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-03', 'YYYY-MM-DD'), 8);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-04', 'YYYY-MM-DD'), 9);
-INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('2024-01-05', 'YYYY-MM-DD'), 10);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/01/2024', 'DD/MM/YYYY'), 1);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/02/2024', 'DD/MM/YYYY'), 2);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/03/2024', 'DD/MM/YYYY'), 3);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/04/2024', 'DD/MM/YYYY'), 4);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/05/2024', 'DD/MM/YYYY'), 5);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/06/2024', 'DD/MM/YYYY'), 6);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/07/2024', 'DD/MM/YYYY'), 7);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/08/2024', 'DD/MM/YYYY'), 8);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/09/2024', 'DD/MM/YYYY'), 9);
+INSERT INTO venta (fecha, id_cliente) VALUES (TO_DATE('01/10/2024', 'DD/MM/YYYY'), 10);
 
 -- poblando la tabla detalle_venta
 -- (id_venta, id_producto, cantidad, precio_unitario)
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (1, 1, 1, 469990);
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (2, 2, 2, 89990);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (3, 3, 3, 300);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (4, 4, 4, 400);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (5, 5, 5, 500);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (6, 6, 6, 469990);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (7, 7, 7, 200);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (8, 8, 8, 300);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (9, 9, 9, 400);
-INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (10, 10, 10, 500);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (3, 3, 1, 450000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (4, 4, 1, 180000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (5, 5, 2, 65000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (6, 6, 1, 45000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (7, 7, 1, 290000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (8, 8, 2, 55000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (9, 9, 1, 75000);
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) VALUES (10, 10, 1, 110000);
 
 INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (1, 1, 1);
 INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (2, 2, 2);
 INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (3, 3, 3);
 INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (4, 4, 4);
 INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (5, 5, 1);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (6, 6, 2);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (7, 7, 3);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (8, 8, 4);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (9, 9, 1);
+INSERT INTO detalle_envio(id_venta, id_producto, id_ciudad) VALUES (10, 10, 2);
+
 
 
 --COMMIT;
@@ -321,32 +327,102 @@ para saber si un cliente compro un producto o  no y saber r cuanto gasto por la 
 entonces la idea es crear un cursor sin parametros para obtener la informacion del cliente y un cursosr con parametros para
 recibir el id del cliente y asi filtar la venta con su id y hacerle join con las tablas detalle y productos */
 
-DECLARE
- -- Record r_cliente
+SET SERVEROUTPUT ON;
+-- Hernan
+DECLARE 
+    -- Se declara la excepcion que se disparara si el cliente no a realizado compras
+    ex_sin_compras EXCEPTION;
+    
+    -- Record r_cliente
     TYPE r_cliente IS RECORD (
-        id_cli      cliente.id_cliente%TYPE,
-        nombre      VARCHAR2(100),
-        monto_total NUMBER(8)
+        id_cli      cliente.id_cliente%TYPE, -- trae el tipo de dato exacto de la columna id_cliente de la tabla cliente
+        rut_cliente VARCHAR2(20),
+        nombre      VARCHAR2(100), -- aca no se colocael %TYPE ya que son variables combinas con otras columnas
+        cant_productos NUMBER(8), -- cantidad de productos comprados 
+        monto_total NUMBER(8)   -- dinero gastado por el cliente
     );
-
-v_info_cliente r_cliente; -- aca se guarda el record en la variable v_info_cliente para usarla despues
-
--- Obtener informacion clientes
-CURSOR c_clientes IS
-        SELECT id_cliente, primer_nombre || ' ' || primer_apellido
+    
+    v_info_cliente r_cliente; -- aca se guarda el record en la variable v_info_cliente para usarla despues
+    
+    -- Esta es la colecion para guardar hasta 5 nombres de los productos comprados por el cliente
+    TYPE lista_prodcutos IS VARRAY(5) OF VARCHAR2(100);
+    v_lista_productos lista_prodcutos := lista_prodcutos(); -- aca se declara la lista vacia y se gurada en una variable para usar despues
+    
+    -- Cursor simple sin parametros para obtener la informacion de clientes
+    CURSOR c_clientes IS
+        SELECT id_cliente, 
+        rut|| '-' || digito_veri AS rut_cliente,
+        primer_nombre || ' ' || primer_apellido AS nombre
         FROM cliente;
-
--- Cursor ex parametros es para traer la info de productos y cantidad por el precio
+    
+    -- Cursor con paramentros para obtener la informacion de los productos al introducir el id cliente
     CURSOR c_detalle_compras (p_id_cliente NUMBER) IS
-        SELECT p.nombre, (dv.cantidad * dv.precio_unitario)
+        SELECT p.nombre AS nombre_producto,
+        dv.cantidad,
+        dv.precio_unitario,
+        (dv.cantidad * dv.precio_unitario) AS subtotal
         FROM venta v
         JOIN detalle_venta dv ON v.id_venta = dv.id_venta
         JOIN producto p ON dv.id_producto = p.id_producto
-        WHERE v.id_cliente = p_id_cliente;
-
+        WHERE v.id_cliente = p_id_cliente; -- aqui se filtra la informacion por del id de cliente sea igual al del id que se encuentra registrado en ventas 
+    
+    -- Estas variables son para el segundo cursor en el segundo loop
+    v_nombre_producto producto.nombre%TYPE;
+    v_cantidad detalle_venta.cantidad%TYPE;
+    v_precio_uni detalle_venta.precio_unitario%TYPE;
+    v_subtotal NUMBER(8);
+    v_contador NUMBER(8);
+    
 BEGIN
+    OPEN c_clientes;
+    LOOP
+        FETCH c_clientes INTO v_info_cliente.id_cli,
+                              v_info_cliente.rut_cliente, 
+                              v_info_cliente.nombre;
+                              
+        EXIT WHEN c_clientes%NOTFOUND;
+        -- se inicializan las variables 
+        v_info_cliente.cant_productos := 0;
+        v_info_cliente.monto_total    := 0;
+        
+        -- para en contador de la lista
+        v_contador := 0;
+        -- Dejamos la lista de productos vacía para los productos
+        v_lista_productos := lista_prodcutos('','','','',''); -- se inicializa la lista con 5 posiciones vacias para los nombres de los productos
+        
+        OPEN c_detalle_compras(v_info_cliente.id_cli);
+        LOOP
+            FETCH c_detalle_compras INTO v_nombre_producto,
+                                         v_cantidad,
+                                         v_precio_uni,
+                                         v_subtotal;
+            EXIT WHEN c_detalle_compras%NOTFOUND;
+            
+            v_info_cliente.cant_productos := v_info_cliente.cant_productos + v_cantidad;
+            v_info_cliente.monto_total := v_info_cliente.monto_total + v_subtotal;
+            
+            IF v_contador < 5 THEN
+                v_contador := v_contador + 1; -- Avanzas a la siguiente posicion (1, 2, 3 susesivamente)
+                v_lista_productos(v_contador) := v_nombre_producto; -- Se guarda el nombre en la en la posicion actual 
+            END IF;
+            
+        END LOOP;
+        CLOSE c_detalle_compras;
+            
+        -- si tiene compras imprime de forma normal
+        DBMS_OUTPUT.PUT_LINE('ID: ' || v_info_cliente.id_cli || ' | RUT: ' || v_info_cliente.rut_cliente || ' | Cliente: ' || v_info_cliente.nombre);
+        DBMS_OUTPUT.PUT_LINE('Cantidad de productos comprados : ' || v_info_cliente.cant_productos);
+        DBMS_OUTPUT.PUT_LINE('Precio unitario de un producto : ' || v_precio_uni);
+        DBMS_OUTPUT.PUT_LINE('Monto total  : $' || TO_CHAR(v_info_cliente.monto_total, '999G999G999'));
+            
+    END LOOP;
+    CLOSE c_clientes;
+    
+        
 
 END;
+/
+
 
 
 -- Cursor de Daniel
